@@ -13,8 +13,10 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 @Component
 public class CurrencyService {
@@ -30,17 +32,13 @@ public class CurrencyService {
     }
 
     File getXmlFile() throws IOException{
-        LocalDate date = LocalDate.now();
+        String date = new SimpleDateFormat("dd.MM.yyyy").
+                format(Calendar.getInstance().
+                        getTime());
         File file = new File("currency.xml");
 
-        int year = date.getYear();
-        int month = date.getMonthValue();
-        int day = date.getDayOfMonth();
-
         String url = "https://www.cbar.az/currencies/" +
-                (day < 10 ? "0" : "") + day + "." +
-                (month < 10 ? "0" : "") + month + "." +
-                year + ".xml";
+                date + ".xml";
 
         InputStream input = new URL(url).openStream();
         try(OutputStream output = new FileOutputStream(file)){
